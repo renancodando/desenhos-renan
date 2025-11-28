@@ -1,0 +1,329 @@
+gap: var(--space-6);
+padding: var(--space-8) 0;
+}
+
+.artwork-card {
+background: var(--bg-secondary);
+border: 1px solid var(--border-color);
+border-radius: var(--radius-xl);
+overflow: hidden;
+transition: all 0.3s ease;
+position: relative;
+display: flex;
+flex-direction: column;
+}
+
+.artwork-card:hover {
+transform: translateY(-5px);
+box-shadow: var(--shadow-lg);
+border-color: var(--border-hover);
+}
+
+.artwork-image-container {
+position: relative;
+padding-top: 75%;
+/* 4:3 Aspect Ratio */
+background: var(--bg-tertiary);
+overflow: hidden;
+}
+
+.artwork-image {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.artwork-card:hover .artwork-image {
+transform: scale(1.05);
+}
+
+.artwork-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+display: flex;
+align-items: flex-end;
+padding: var(--space-4);
+}
+
+.artwork-card:hover .artwork-overlay {
+opacity: 1;
+}
+
+.artwork-info {
+padding: var(--space-4);
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+.artwork-title {
+font-size: 1.1rem;
+font-weight: 600;
+margin-bottom: var(--space-2);
+color: var(--text-primary);
+}
+
+.artwork-meta {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: var(--space-4);
+}
+
+.artist-link {
+display: flex;
+align-items: center;
+gap: var(--space-2);
+color: var(--text-secondary);
+font-size: 0.9rem;
+transition: color 0.2s;
+}
+
+.artist-link:hover {
+color: var(--primary-400);
+}
+
+.artist-avatar {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+background: var(--bg-tertiary);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.75rem;
+color: var(--text-tertiary);
+}
+
+.like-btn {
+background: transparent;
+border: none;
+color: var(--text-tertiary);
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: var(--space-1);
+font-size: 0.9rem;
+transition: all 0.2s;
+padding: var(--space-1) var(--space-2);
+border-radius: var(--radius-md);
+}
+
+.like-btn:hover {
+background: rgba(236, 72, 153, 0.1);
+color: var(--secondary-400);
+}
+
+.like-btn.liked {
+color: var(--secondary-500);
+}
+
+.like-btn.liked i {
+font-weight: 900;
+}
+
+/* Loading State */
+.loading-skeleton {
+height: 300px;
+background: var(--bg-secondary);
+border-radius: var(--radius-xl);
+animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+0% {
+opacity: 0.6;
+}
+
+50% {
+opacity: 1;
+}
+
+100% {
+opacity: 0.6;
+}
+}
+</style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">InkVerse</div>
+            <ul class="navbar-nav">
+                <li><a href="sketch.html" class="nav-link">Studio</a></li>
+                <li><a href="community.html" class="nav-link active">Community</a></li>
+                <li><a href="#" id="profile-link" class="nav-link">Profile</a></li>
+                <li id="auth-btn-container">
+                    <!-- Injected by JS -->
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="flex justify-between items-center py-8 mt-8">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Community Gallery</h1>
+                <p class="text-gray-400">Discover inspiring artwork from creators worldwide</p>
+            </div>
+            <!-- Filter/Sort could go here -->
+        </div>
+
+        <div id="gallery-grid" class="gallery-grid">
+            <!-- Loading Skeletons -->
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+        </div>
+    </div>
+
+    <script>
+        const galleryGrid = document.getElementById('gallery-grid');
+        const profileLink = document.getElementById('profile-link');
+        const authBtnContainer = document.getElementById('auth-btn-container');
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        // Update Nav
+        if (token) {
+            profileLink.href = `profile.html?id=${user.id}`;
+            authBtnContainer.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>`;
+        } else {
+            profileLink.style.display = 'none';
+            authBtnContainer.innerHTML = `<a href="index.html" class="btn btn-primary btn-sm">Sign In</a>`;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        async function fetchCommunityDrawings() {
+            try {
+                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+                const res = await fetch('/api/community', { headers });
+
+                if (!res.ok) throw new Error('Failed to fetch');
+
+                const drawings = await res.json();
+                renderDrawings(drawings);
+            } catch (err) {
+                console.error(err);
+                galleryGrid.innerHTML = `<div class="text-center col-span-full text-red-500">Failed to load gallery. Please try again later.</div>`;
+            }
+        }
+
+        function renderDrawings(drawings) {
+            galleryGrid.innerHTML = '';
+
+            if (drawings.length === 0) {
+                galleryGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-palette text-4xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400">No artworks yet. Be the first to publish!</p>
+                        <a href="sketch.html" class="btn btn-primary mt-4">Start Creating</a>
+                    </div>
+                `;
+                return;
+            }
+
+            drawings.forEach(drawing => {
+                const card = document.createElement('div');
+                card.className = 'artwork-card fade-in';
+
+                const isLiked = drawing.is_liked > 0;
+
+                card.innerHTML = `
+                    <div class="artwork-image-container">
+                        <img src="${drawing.image_data}" alt="${drawing.title}" class="artwork-image" loading="lazy">
+                        <div class="artwork-overlay">
+                            <a href="${drawing.image_data}" download="${drawing.title}.png" class="btn btn-icon btn-sm bg-black/50 hover:bg-black/80 text-white backdrop-blur">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="artwork-info">
+                        <div>
+                            <h3 class="artwork-title">${drawing.title}</h3>
+                            <a href="profile.html?id=${drawing.user_id}" class="artist-link">
+                                <div class="artist-avatar">
+                                    ${drawing.username.charAt(0).toUpperCase()}
+                                </div>
+                                <span>${drawing.username}</span>
+                            </a>
+                        </div>
+                        <div class="artwork-meta">
+                            <span class="text-xs text-gray-500">${new Date(drawing.created_at).toLocaleDateString()}</span>
+                            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(this, ${drawing.id})">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                                <span class="like-count">${drawing.like_count}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        async function toggleLike(btn, drawingId) {
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Optimistic UI update
+            const icon = btn.querySelector('i');
+            const countSpan = btn.querySelector('.like-count');
+            let count = parseInt(countSpan.textContent);
+            const isLiked = btn.classList.contains('liked');
+
+            btn.classList.toggle('liked');
+            icon.classList.toggle('fas');
+            icon.classList.toggle('far');
+
+            if (isLiked) {
+                count--;
+            } else {
+                count++;
+            }
+            countSpan.textContent = count;
+
+            // API Call
+            try {
+                const res = await fetch(`/api/drawings/${drawingId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!res.ok) {
+                    // Revert on error
+                    btn.classList.toggle('liked');
+                    icon.classList.toggle('fas');
+                    icon.classList.toggle('far');
+                    countSpan.textContent = isLiked ? count + 1 : count - 1;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        fetchCommunityDrawings();
+    </script>
+</body>
+
+</html>

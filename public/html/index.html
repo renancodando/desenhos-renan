@@ -1,0 +1,330 @@
+/* Hero Section */
+.hero {
+min-height: 100vh;
+display: flex;
+align-items: center;
+position: relative;
+padding-top: 80px;
+/* Navbar height */
+background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.1), transparent 40%),
+radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent 40%);
+}
+
+.hero-content {
+max-width: 800px;
+margin: 0 auto;
+text-align: center;
+padding: var(--space-8);
+position: relative;
+z-index: 10;
+}
+
+.hero-title {
+font-size: 4.5rem;
+font-weight: 900;
+line-height: 1.1;
+margin-bottom: var(--space-6);
+letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+font-size: 1.25rem;
+color: var(--text-secondary);
+margin-bottom: var(--space-8);
+max-width: 600px;
+margin-left: auto;
+margin-right: auto;
+}
+
+.hero-buttons {
+display: flex;
+gap: var(--space-4);
+justify-content: center;
+}
+
+/* Floating Elements */
+.floating-card {
+position: absolute;
+background: var(--bg-glass);
+backdrop-filter: blur(12px);
+border: 1px solid var(--border-color);
+border-radius: var(--radius-xl);
+padding: var(--space-4);
+box-shadow: var(--shadow-lg);
+animation: float 6s ease-in-out infinite;
+z-index: 1;
+}
+
+.card-1 {
+top: 20%;
+left: 5%;
+animation-delay: 0s;
+}
+
+.card-2 {
+bottom: 20%;
+right: 5%;
+animation-delay: 2s;
+}
+
+.card-3 {
+top: 15%;
+right: 10%;
+animation-delay: 4s;
+}
+
+@keyframes float {
+
+0%,
+100% {
+transform: translateY(0);
+}
+
+50% {
+transform: translateY(-20px);
+}
+}
+
+/* Auth Modal */
+.modal-overlay {
+position: fixed;
+inset: 0;
+background: rgba(15, 12, 21, 0.8);
+backdrop-filter: blur(8px);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 100;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s;
+}
+
+.modal-overlay.active {
+opacity: 1;
+pointer-events: all;
+}
+
+.auth-card {
+width: 100%;
+max-width: 400px;
+background: var(--bg-secondary);
+border: 1px solid var(--border-color);
+border-radius: var(--radius-2xl);
+padding: var(--space-8);
+transform: scale(0.95);
+transition: transform 0.3s;
+box-shadow: var(--shadow-glow);
+}
+
+.modal-overlay.active .auth-card {
+transform: scale(1);
+}
+
+.close-modal {
+position: absolute;
+top: var(--space-4);
+right: var(--space-4);
+background: transparent;
+border: none;
+color: var(--text-tertiary);
+cursor: pointer;
+font-size: 1.25rem;
+}
+
+.close-modal:hover {
+color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+.hero-title {
+font-size: 3rem;
+}
+
+.floating-card {
+display: none;
+}
+}
+</style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">InkVerse</div>
+            <div class="navbar-nav">
+                <button class="btn btn-ghost btn-sm" onclick="showLogin()">Sign In</button>
+                <button class="btn btn-primary btn-sm" onclick="showRegister()">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Decorative Elements -->
+        <div class="floating-card card-1">
+            <i class="fas fa-paint-brush fa-2x" style="color: var(--primary-400)"></i>
+        </div>
+        <div class="floating-card card-2">
+            <i class="fas fa-palette fa-2x" style="color: var(--secondary-400)"></i>
+        </div>
+        <div class="floating-card card-3">
+            <i class="fas fa-layer-group fa-2x" style="color: var(--accent-cyan)"></i>
+        </div>
+
+        <div class="hero-content fade-in">
+            <h1 class="hero-title">
+                Where Ideas Become <span class="gradient-text">Masterpieces</span>
+            </h1>
+            <p class="hero-subtitle">
+                The professional digital art studio in your browser. Create, share, and connect with a global community
+                of artists.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-lg" onclick="showRegister()">
+                    Start Creating <i class="fas fa-arrow-right"></i>
+                </button>
+                <a href="community.html" class="btn btn-secondary btn-lg">
+                    Explore Art
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modals -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="auth-card">
+            <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold mb-2" id="modal-title">Welcome Back</h2>
+                <p class="text-gray-400" id="modal-subtitle">Sign in to continue creating</p>
+            </div>
+
+            <div id="error-msg"
+                class="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg mb-4 text-center hidden">
+            </div>
+
+            <form id="auth-form">
+                <div class="form-group" id="username-group" style="display: none;">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="ArtistName">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full" id="submit-btn">Sign In</button>
+            </form>
+
+            <div class="text-center mt-6 text-sm text-gray-400">
+                <span id="switch-text">Don't have an account?</span>
+                <button class="text-white font-semibold hover:underline ml-1" onclick="toggleAuthMode()"
+                    id="switch-btn">Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('auth-modal');
+        const form = document.getElementById('auth-form');
+        const usernameGroup = document.getElementById('username-group');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        const submitBtn = document.getElementById('submit-btn');
+        const switchText = document.getElementById('switch-text');
+        const switchBtn = document.getElementById('switch-btn');
+        const errorMsg = document.getElementById('error-msg');
+
+        let isRegister = false;
+
+        function showLogin() {
+            isRegister = false;
+            updateModalUI();
+            modal.classList.add('active');
+        }
+
+        function showRegister() {
+            isRegister = true;
+            updateModalUI();
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            errorMsg.classList.add('hidden');
+            form.reset();
+        }
+
+        function toggleAuthMode() {
+            isRegister = !isRegister;
+            updateModalUI();
+        }
+
+        function updateModalUI() {
+            errorMsg.classList.add('hidden');
+            if (isRegister) {
+                usernameGroup.style.display = 'block';
+                modalTitle.textContent = 'Create Account';
+                modalSubtitle.textContent = 'Join the community of artists';
+                submitBtn.textContent = 'Sign Up';
+                switchText.textContent = 'Already have an account?';
+                switchBtn.textContent = 'Sign In';
+            } else {
+                usernameGroup.style.display = 'none';
+                modalTitle.textContent = 'Welcome Back';
+                modalSubtitle.textContent = 'Sign in to continue creating';
+                submitBtn.textContent = 'Sign In';
+                switchText.textContent = "Don't have an account?";
+                switchBtn.textContent = 'Create Account';
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+
+            const endpoint = isRegister ? '/api/register' : '/api/login';
+            const body = isRegister ? { username, email, password } : { email, password };
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'sketch.html';
+                } else {
+                    const msg = await res.text();
+                    errorMsg.textContent = msg;
+                    errorMsg.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Connection error. Please try again.';
+                errorMsg.classList.remove('hidden');
+            }
+        });
+
+        // Check if already logged in
+        if (localStorage.getItem('token')) {
+            window.location.href = 'sketch.html';
+        }
+    </script>
+</body>
+
+</html>

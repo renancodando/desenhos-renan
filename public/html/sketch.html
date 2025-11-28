@@ -1,0 +1,197 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">InkVerse</div>
+        <ul class="navbar-nav">
+            <li><a href="sketch.html" class="nav-link active">Studio</a></li>
+            <li><a href="community.html" class="nav-link">Community</a></li>
+            <li><a href="#" id="profile-link" class="nav-link">Profile</a></li>
+            <li><button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Editor -->
+<div class="editor-container">
+    <!-- Left Toolbar -->
+    <div class="toolbar-left">
+        <div class="toolbar-section">
+            <h4 class="toolbar-title">Tools</h4>
+            <div class="tool-grid">
+                <button class="tool-btn active" id="tool-brush" title="Brush (B)" data-tool="brush">
+                    <i class="fas fa-paint-brush"></i>
+                </button>
+                <button class="tool-btn" id="tool-eraser" title="Eraser (E)" data-tool="eraser">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button class="tool-btn" id="tool-fill" title="Fill (F)" data-tool="fill">
+                    <i class="fas fa-fill-drip"></i>
+                </button>
+                <button class="tool-btn" id="tool-picker" title="Color Picker (I)" data-tool="picker">
+                    <i class="fas fa-eye-dropper"></i>
+                </button>
+                <button class="tool-btn" id="tool-line" title="Line (L)" data-tool="line">
+                    <i class="fas fa-slash"></i>
+                </button>
+                <button class="tool-btn" id="tool-rect" title="Rectangle (R)" data-tool="rect">
+                    <i class="far fa-square"></i>
+                </button>
+                <button class="tool-btn" id="tool-circle" title="Circle (C)" data-tool="circle">
+                    <i class="far fa-circle"></i>
+                </button>
+                <button class="tool-btn" id="tool-text" title="Text (T)" data-tool="text">
+                    <i class="fas fa-font"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="toolbar-section">
+            <h4 class="toolbar-title">Color</h4>
+            <div class="color-picker-container">
+                <input type="color" id="color-picker" value="#000000">
+                <div class="color-swatches">
+                    <div class="color-swatch" style="background: #000000" data-color="#000000"></div>
+                    <div class="color-swatch" style="background: #ffffff" data-color="#ffffff"></div>
+                    <div class="color-swatch" style="background: #ef4444" data-color="#ef4444"></div>
+                    <div class="color-swatch" style="background: #10b981" data-color="#10b981"></div>
+                    <div class="color-swatch" style="background: #3b82f6" data-color="#3b82f6"></div>
+                    <div class="color-swatch" style="background: #f59e0b" data-color="#f59e0b"></div>
+                    <div class="color-swatch" style="background: #8b5cf6" data-color="#8b5cf6"></div>
+                    <div class="color-swatch" style="background: #ec4899" data-color="#ec4899"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar-section">
+            <h4 class="toolbar-title">Brush Size</h4>
+            <input type="range" id="brush-size" min="1" max="100" value="5" class="slider">
+            <div class="brush-preview">
+                <div id="brush-preview-circle"></div>
+            </div>
+        </div>
+
+        <div class="toolbar-section">
+            <h4 class="toolbar-title">Actions</h4>
+            <div class="flex gap-2 mb-2">
+                <button class="btn btn-secondary w-full btn-sm" id="action-undo" title="Undo (Ctrl+Z)">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="btn btn-secondary w-full btn-sm" id="action-redo" title="Redo (Ctrl+Y)">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+            <button class="btn btn-secondary w-full btn-sm" id="action-clear" title="Clear Canvas">
+                <i class="fas fa-trash"></i> Clear Canvas
+            </button>
+        </div>
+    </div>
+
+    <!-- Canvas Area -->
+    <div class="canvas-area">
+        <div class="canvas-controls">
+            <div class="canvas-zoom">
+                <button class="btn btn-icon btn-sm" id="zoom-out" title="Zoom Out">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <span id="zoom-level">100%</span>
+                <button class="btn btn-icon btn-sm" id="zoom-in" title="Zoom In">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="btn btn-icon btn-sm" id="zoom-reset" title="Reset Zoom">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="canvas-info">
+                <span id="canvas-size">800 × 600</span>
+            </div>
+        </div>
+        <div class="canvas-wrapper" id="canvas-wrapper">
+            <canvas id="main-canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="sidebar-right">
+        <div class="sidebar-tabs">
+            <button class="sidebar-tab active" data-tab="layers">
+                <i class="fas fa-layer-group"></i> Layers
+            </button>
+            <button class="sidebar-tab" data-tab="properties">
+                <i class="fas fa-sliders-h"></i> Props
+            </button>
+            <button class="sidebar-tab" data-tab="save">
+                <i class="fas fa-save"></i> Save
+            </button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Layers Tab -->
+            <div class="tab-panel active" id="tab-layers">
+                <div class="layers-header">
+                    <h4 class="text-sm font-bold uppercase text-gray-400">Layers</h4>
+                    <button class="btn btn-icon btn-sm" id="add-layer" title="Add Layer">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="layers-list" class="layers-list">
+                    <!-- Layers will be added here -->
+                </div>
+            </div>
+
+            <!-- Properties Tab -->
+            <div class="tab-panel" id="tab-properties">
+                <h4 class="text-sm font-bold uppercase text-gray-400 mb-4">Properties</h4>
+                <div class="property-group">
+                    <label class="form-label">Opacity</label>
+                    <div class="flex items-center gap-2">
+                        <input type="range" id="layer-opacity" min="0" max="100" value="100" class="slider">
+                        <span id="opacity-value">100%</span>
+                    </div>
+                </div>
+                <div class="property-group">
+                    <label class="form-label">Blend Mode</label>
+                    <select id="blend-mode" class="form-input">
+                        <option value="source-over">Normal</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="screen">Screen</option>
+                        <option value="overlay">Overlay</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Save Tab -->
+            <div class="tab-panel" id="tab-save">
+                <h4 class="text-sm font-bold uppercase text-gray-400 mb-4">Save & Export</h4>
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="drawing-title" class="form-input" placeholder="My Masterpiece"
+                        value="Untitled">
+                </div>
+                <div class="form-group">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="is-public" class="accent-purple-500 w-4 h-4">
+                        <span class="text-gray-300">Publish to Community</span>
+                    </label>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <button class="btn btn-primary w-full" id="save-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Save to Gallery
+                    </button>
+                    <button class="btn btn-secondary w-full" id="export-png-btn">
+                        <i class="fas fa-file-image"></i> Export PNG
+                    </button>
+                </div>
+            </div>
+        </div>
+        if (user.id) {
+        document.getElementById('profile-link').href = `profile.html?id=${user.id}`;
+        }
+
+        function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+        }
+        </script>
+        </body>
+
+        </html>

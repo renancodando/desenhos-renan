@@ -1,0 +1,398 @@
+border-bottom: 1px solid var(--border-color);
+}
+
+.profile-avatar-lg {
+width: 120px;
+height: 120px;
+border-radius: 50%;
+background: var(--bg-tertiary);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 3rem;
+color: var(--text-tertiary);
+border: 4px solid var(--bg-primary);
+box-shadow: var(--shadow-xl);
+margin-bottom: var(--space-4);
+}
+
+.profile-stats {
+display: flex;
+gap: var(--space-8);
+margin-top: var(--space-6);
+}
+
+.stat-item {
+text-align: center;
+}
+
+.stat-value {
+font-size: 1.5rem;
+font-weight: 700;
+color: var(--text-primary);
+}
+
+.stat-label {
+color: var(--text-tertiary);
+font-size: 0.875rem;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+}
+
+/* Reusing Gallery Grid Styles */
+.gallery-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: var(--space-6);
+padding: var(--space-8) 0;
+}
+
+.artwork-card {
+background: var(--bg-secondary);
+border: 1px solid var(--border-color);
+border-radius: var(--radius-xl);
+overflow: hidden;
+transition: all 0.3s ease;
+position: relative;
+display: flex;
+flex-direction: column;
+}
+
+.artwork-card:hover {
+transform: translateY(-5px);
+box-shadow: var(--shadow-lg);
+border-color: var(--border-hover);
+}
+
+.artwork-image-container {
+position: relative;
+padding-top: 75%;
+background: var(--bg-tertiary);
+overflow: hidden;
+}
+
+.artwork-image {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.artwork-card:hover .artwork-image {
+transform: scale(1.05);
+}
+
+.artwork-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+display: flex;
+align-items: flex-end;
+padding: var(--space-4);
+}
+
+.artwork-card:hover .artwork-overlay {
+opacity: 1;
+}
+
+.artwork-info {
+padding: var(--space-4);
+}
+
+.artwork-title {
+font-size: 1.1rem;
+font-weight: 600;
+margin-bottom: var(--space-2);
+color: var(--text-primary);
+}
+
+.artwork-meta {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: var(--space-4);
+}
+
+.like-btn {
+background: transparent;
+border: none;
+color: var(--text-tertiary);
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: var(--space-1);
+font-size: 0.9rem;
+transition: all 0.2s;
+padding: var(--space-1) var(--space-2);
+border-radius: var(--radius-md);
+}
+
+.like-btn:hover {
+background: rgba(236, 72, 153, 0.1);
+color: var(--secondary-400);
+}
+
+.like-btn.liked {
+color: var(--secondary-500);
+}
+
+.like-btn.liked i {
+font-weight: 900;
+}
+</style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">InkVerse</div>
+            <ul class="navbar-nav">
+                <li><a href="sketch.html" class="nav-link">Studio</a></li>
+                <li><a href="community.html" class="nav-link">Community</a></li>
+                <li><a href="#" id="my-profile-link" class="nav-link active">Profile</a></li>
+                <li id="auth-btn-container">
+                    <!-- Injected by JS -->
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="container">
+            <div class="flex flex-col items-center">
+                <div class="profile-avatar-lg" id="profile-avatar">
+                    <!-- Initials -->
+                </div>
+                <h1 class="text-3xl font-bold mb-2" id="profile-username">Loading...</h1>
+                <p class="text-gray-400" id="profile-joined">Joined...</p>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-artworks">0</div>
+                        <div class="stat-label">Artworks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-likes">0</div>
+                        <div class="stat-label">Likes Received</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="container">
+        <div class="py-8">
+            <h2 class="text-xl font-bold mb-6 border-b border-white/10 pb-4">Portfolio</h2>
+            <div id="gallery-grid" class="gallery-grid">
+                border-bottom: 1px solid var(--border-color);
+                }
+
+                .profile-avatar-lg {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                background: var(--bg-tertiary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: var(--text-tertiary);
+                border: 4px solid var(--bg-primary);
+                box-shadow: var(--shadow-xl);
+                margin-bottom: var(--space-4);
+                }
+
+                .profile-stats {
+                display: flex;
+                gap: var(--space-8);
+                margin-top: var(--space-6);
+                }
+
+                .stat-item {
+                text-align: center;
+                }
+
+                .stat-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                }
+
+                .stat-label {
+                color: var(--text-tertiary);
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                }
+
+                /* Reusing Gallery Grid Styles */
+                .gallery-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: var(--space-6);
+                padding: var(--space-8) 0;
+                }
+
+                .artwork-card {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: var(--radius-xl);
+                overflow: hidden;
+                transition: all 0.3s ease;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                }
+
+                .artwork-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-lg);
+                border-color: var(--border-hover);
+                }
+
+                .artwork-image-container {
+                position: relative;
+                padding-top: 75%;
+                background: var(--bg-tertiary);
+                overflow: hidden;
+                }
+
+                .artwork-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+                }
+
+                .artwork-card:hover .artwork-image {
+                transform: scale(1.05);
+                }
+
+                .artwork-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                opacity: 0;
+                transition: opacity 0.3s;
+                display: flex;
+                align-items: flex-end;
+                padding: var(--space-4);
+                }
+
+                .artwork-card:hover .artwork-overlay {
+                opacity: 1;
+                }
+
+                .artwork-info {
+                padding: var(--space-4);
+                }
+
+                .artwork-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: var(--space-2);
+                color: var(--text-primary);
+                }
+
+                .artwork-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: var(--space-4);
+                }
+
+                .like-btn {
+                background: transparent;
+                border: none;
+                color: var(--text-tertiary);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: var(--space-1);
+                font-size: 0.9rem;
+                transition: all 0.2s;
+                padding: var(--space-1) var(--space-2);
+                border-radius: var(--radius-md);
+                }
+
+                .like-btn:hover {
+                background: rgba(236, 72, 153, 0.1);
+                color: var(--secondary-400);
+                }
+
+                .like-btn.liked {
+                color: var(--secondary-500);
+                }
+
+                .like-btn.liked i {
+                font-weight: 900;
+                }
+                </style>
+                </head>
+
+                <body>
+                    <!-- Navigation -->
+                    <nav class="navbar">
+                        <div class="navbar-container">
+                            <div class="navbar-brand">InkVerse</div>
+                            <ul class="navbar-nav">
+                                <li><a href="sketch.html" class="nav-link">Studio</a></li>
+                                <li><a href="community.html" class="nav-link">Community</a></li>
+                                <li><a href="#" id="my-profile-link" class="nav-link active">Profile</a></li>
+                                <li id="auth-btn-container">
+                                    <!-- Injected by JS -->
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <!-- Profile Header -->
+                    <div class="profile-header">
+                        <div class="container">
+                            <div class="flex flex-col items-center">
+                                <div class="profile-avatar-lg" id="profile-avatar">
+                                    <!-- Initials -->
+                                </div>
+                                <h1 class="text-3xl font-bold mb-2" id="profile-username">Loading...</h1>
+                                <p class="text-gray-400" id="profile-joined">Joined...</p>
+
+                                <div class="profile-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="stat-artworks">0</div>
+                                        <div class="stat-label">Artworks</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="stat-likes">0</div>
+                                        <div class="stat-label">Likes Received</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery -->
+                    <div class="container">
+                        <div class="py-8">
+                            <h2 class="text-xl font-bold mb-6 border-b border-white/10 pb-4">Portfolio</h2>
+                            <div id="gallery-grid" class="gallery-grid">
+                                <!-- Loading -->
+                                <div class="text-center col-span-full text-gray-500 py-12">Loading artworks...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script src="../js/profile.js"></script>
+                </body>
+
+                </html>

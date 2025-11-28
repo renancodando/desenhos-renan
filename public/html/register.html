@@ -1,0 +1,264 @@
+background: var(--bg-primary);
+}
+
+.auth-showcase {
+position: relative;
+background: linear-gradient(135deg, var(--secondary-600), var(--accent-600));
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+
+.auth-showcase::before {
+content: '';
+position: absolute;
+inset: 0;
+background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+        </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(%23grid)" />
+</svg>');
+opacity: 0.3;
+}
+
+.showcase-content {
+position: relative;
+z-index: 1;
+text-align: center;
+padding: var(--space-12);
+}
+
+.showcase-title {
+font-size: 3.5rem;
+font-weight: 900;
+margin-bottom: var(--space-6);
+background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.showcase-subtitle {
+font-size: 1.25rem;
+color: rgba(255, 255, 255, 0.9);
+max-width: 500px;
+}
+
+.auth-form-container {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: var(--space-8);
+background: var(--bg-secondary);
+}
+
+.auth-form-wrapper {
+width: 100%;
+max-width: 450px;
+}
+
+.auth-logo {
+text-align: center;
+margin-bottom: var(--space-8);
+}
+
+.auth-logo h1 {
+font-size: 2.5rem;
+margin-bottom: var(--space-2);
+}
+
+.auth-logo p {
+color: var(--text-secondary);
+margin: 0;
+}
+
+.auth-card {
+background: var(--bg-glass);
+border: 1px solid var(--border-color);
+border-radius: var(--radius-2xl);
+padding: var(--space-8);
+backdrop-filter: blur(10px);
+}
+
+.auth-title {
+font-size: 1.75rem;
+margin-bottom: var(--space-2);
+text-align: center;
+}
+
+.auth-subtitle {
+color: var(--text-secondary);
+text-align: center;
+margin-bottom: var(--space-8);
+}
+
+.error-message {
+background: rgba(239, 68, 68, 0.1);
+border: 1px solid var(--error);
+color: var(--error);
+padding: var(--space-4);
+border-radius: var(--radius-lg);
+margin-bottom: var(--space-4);
+text-align: center;
+display: none;
+}
+
+.error-message.show {
+display: block;
+}
+
+.success-message {
+background: rgba(16, 185, 129, 0.1);
+border: 1px solid var(--success);
+color: var(--success);
+padding: var(--space-4);
+border-radius: var(--radius-lg);
+margin-bottom: var(--space-4);
+text-align: center;
+display: none;
+}
+
+.success-message.show {
+display: block;
+}
+
+.divider {
+display: flex;
+align-items: center;
+text-align: center;
+margin: var(--space-6) 0;
+color: var(--text-tertiary);
+}
+
+.divider::before,
+.divider::after {
+content: '';
+flex: 1;
+border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+padding: 0 var(--space-4);
+font-size: 0.875rem;
+}
+
+@media (max-width: 968px) {
+.auth-container {
+grid-template-columns: 1fr;
+}
+
+.auth-showcase {
+display: none;
+}
+}
+</style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-showcase">
+            <div class="showcase-content fade-in">
+                <h1 class="showcase-title">Join InkVerse</h1>
+                <p class="showcase-subtitle">
+                    Start your creative journey today. Join thousands of artists creating and sharing amazing digital
+                    art.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-wrapper fade-in">
+                <div class="auth-logo">
+                    <h1 class="gradient-text">InkVerse</h1>
+                    <p>Digital Art Platform</p>
+                </div>
+
+                <div class="auth-card">
+                    <h2 class="auth-title">Create Account</h2>
+                    <p class="auth-subtitle">Start creating in seconds</p>
+
+                    <div id="error" class="error-message"></div>
+                    <div id="success" class="success-message"></div>
+
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username</label>
+                            <input type="text" id="username" class="form-input" placeholder="artist_name" required
+                                minlength="3">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" id="password" class="form-input" placeholder="••••••••" required
+                                minlength="6">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full btn-lg">
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div class="divider">
+                        <span>Already have an account?</span>
+                    </div>
+
+                    <a href="index.html" class="btn btn-secondary w-full">
+                        Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+            const successDiv = document.getElementById('success');
+
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+
+            try {
+                const res = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    successDiv.textContent = 'Account created! Redirecting...';
+                    successDiv.classList.add('show');
+
+                    setTimeout(() => {
+                        window.location.href = 'sketch.html';
+                    }, 1000);
+                } else {
+                    const msg = await res.text();
+                    errorDiv.textContent = msg;
+                    errorDiv.classList.add('show');
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.classList.add('show');
+            }
+        });
+    </script>
+</body>
+
+</html>
