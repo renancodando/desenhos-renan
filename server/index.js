@@ -10,9 +10,10 @@ const PORT = 3000;
 const JWT_SECRET = 'supersecretkey123';
 
 // Database
-const db = new sqlite3.Database('./db/inkverse.db', (err) => {
+const DB_PATH = process.env.VERCEL ? '/tmp/inkverse.db' : './db/inkverse.db';
+const db = new sqlite3.Database(DB_PATH, (err) => {
     if (err) console.error('Database error:', err);
-    else console.log('Connected to database');
+    else console.log(`Connected to database at ${DB_PATH}`);
 });
 
 // Create tables
@@ -223,6 +224,12 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/html/index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Export for Vercel
+module.exports = app;
+
+// Only listen if run directly
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
